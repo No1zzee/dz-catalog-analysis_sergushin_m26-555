@@ -63,7 +63,7 @@ def decade_label(year):
         case _ if 2015 <= year <= 2020:
             return "недавние"
         case _:
-            return "недавние"
+            return "Старые"
 
 
 def find_non_comedy_movies(movies):
@@ -217,7 +217,41 @@ def test_for_iter(movies):
           f" {total_duration} мин")
 
 
+def build_report(movies):
+    print("ОТЧЕТ ПО КАТАЛОГУ")
+
+    if not movies:
+        print("Каталог пуст.")
+        return
+
+    print(f"Средний рейтинг: {average_rating(movies)}")
+
+    _, _, average_age = catalog_age_stats(movies)
+    print(f"Средний возраст фильмов: {average_age} лет")
+
+    print("\nТоп-3 фильма:")
+    top_movies = sorted(
+        movies, key=lambda movie: movie["rating"], reverse=True
+    )[:3]
+
+    for movie in top_movies:
+        print(f"  {format_report_line(movie)}")
+
+    print("\nФильмов по жанрам:")
+    genre_counts = count_by_genre(movies)
+    sorted_genres = sorted(
+        genre_counts.items(),
+        key=lambda item: (-item[1], item[0]),
+    )
+
+    for genre, count in sorted_genres:
+        print(f"  {genre} — {count}")
+
+    genres_line = ", ".join(sorted(all_genres(movies)))
+    print(f"\nВсе жанры каталога: {genres_line}")
+
 if __name__ == "__main__":
+    build_report(movies)
     print(average_rating(movies))
     print(catalog_age_stats(movies))
     print(duration_in_hours(155))
