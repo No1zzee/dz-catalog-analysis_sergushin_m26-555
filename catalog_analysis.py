@@ -27,11 +27,13 @@ movies = [
 
 def average_rating(movies):
     all_rat = sum(movie["rating"] for movie in movies)
+
     return round(all_rat / len(movies), 1)
 
 
 def catalog_age_stats(movies, current_year=2026):
     ages = [current_year - movie["year"] for movie in movies]
+
     return (
         max(ages),
         min(ages),
@@ -42,6 +44,7 @@ def catalog_age_stats(movies, current_year=2026):
 def duration_in_hours(minutes):
     hours = minutes // 60
     rest_minutes = minutes % 60
+
     return f"{hours}ч {rest_minutes}м"
 
 
@@ -72,11 +75,14 @@ def find_non_comedy_movies(movies):
 
 def find_first_masterpiece(movies):
     i = 0
+
     while i < len(movies):
         movie = movies[i]
+
         if movie["rating"] > 9.0:
             print(movie["title"])
             break
+
         i += 1
     else:
         print("Шедевров не найдено")
@@ -88,6 +94,34 @@ def count_long_movies(movies, threshold=120):
         if movie["duration_min"] > threshold:
             count += 1
     return count
+
+
+def normalize_title(title):
+    words = title.split()
+    normalized_words = []
+    
+    for word in words:
+        normalized_words.append(word[0].upper()
+                                + word[1:])
+
+    return " ".join(normalized_words)
+
+
+def make_slug(title):
+    normalized_title = normalize_title(title)
+    return normalized_title.lower().replace(' ', '-')
+
+
+def format_report_line(movie):
+    title = normalize_title(movie["title"])
+    duration = duration_in_hours(movie["duration_min"])
+    genres = ", ".join(sorted(movie["genres"]))
+
+    return (
+        f'"{title}" ({movie["year"]}) — '
+        f'{movie["rating"]}/10, {duration}, жанры: '
+        f'{genres}'
+    )
 
 
 if __name__ == "__main__":
@@ -118,3 +152,7 @@ if __name__ == "__main__":
     print("\nКоличество фильмов длиннее 120 минут:")
     count_long_movies(movies, threshold=120)
     print(count_long_movies(movies))
+
+    print(normalize_title("silent hours"))
+    print(make_slug("Silent Hours"))
+    print(format_report_line(movies[7]))
