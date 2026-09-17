@@ -63,7 +63,7 @@ def decade_label(year):
         case _ if 2015 <= year <= 2020:
             return "недавние"
         case _:
-            return "Старые"
+            return "cтарые"
 
 
 def find_non_comedy_movies(movies):
