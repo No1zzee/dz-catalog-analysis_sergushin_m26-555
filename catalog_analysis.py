@@ -102,7 +102,7 @@ def normalize_title(title):
     
     for word in words:
         normalized_words.append(word[0].upper()
-                                + word[1:])
+        + word[1:])
 
     return " ".join(normalized_words)
 
@@ -122,6 +122,26 @@ def format_report_line(movie):
         f'{movie["rating"]}/10, {duration}, жанры: '
         f'{genres}'
     )
+
+
+def titles_sorted_by_rating(movies):
+    sorted_movies = sorted(
+        movies, key=lambda movie: movie["rating"],
+        reverse=True
+    )
+
+    return [movie["title"] for movie in sorted_movies]
+
+
+def top_n_by_rating(movies, n=3):
+    sorted_movies = sorted(
+        movies, key=lambda movie: movie["rating"],
+        reverse=True
+    )
+    return [
+        (movie["title"], movie["rating"])
+        for movie in sorted_movies[:n]
+    ]
 
 
 if __name__ == "__main__":
@@ -156,3 +176,6 @@ if __name__ == "__main__":
     print(normalize_title("silent hours"))
     print(make_slug("Silent Hours"))
     print(format_report_line(movies[7]))
+
+    print(titles_sorted_by_rating(movies))
+    print(top_n_by_rating(movies, 3))
